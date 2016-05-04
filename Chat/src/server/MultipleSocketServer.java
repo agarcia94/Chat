@@ -23,8 +23,9 @@ public class MultipleSocketServer implements Runnable {
 			ServerSocket socket1 = new ServerSocket(port);
 			System.out.println("MultipleSocketServer Initialized");
 			while (true) {
-				Socket connection = socket1.accept();
-				Runnable runnable = new MultipleSocketServer(connection, ++count);
+				System.out.println("connecting to client");
+				Socket clientSocket = socket1.accept(); //this is the connection to the client
+				Runnable runnable = new MultipleSocketServer(clientSocket, ++count);
 				Thread thread = new Thread(runnable);
 				thread.start();
 			}
