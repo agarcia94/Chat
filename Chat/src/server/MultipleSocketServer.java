@@ -9,7 +9,7 @@ public class MultipleSocketServer implements Runnable {
 	private Socket connection;
 	private String TimeStamp;
 	private int ID;
-	
+	 
 	public MultipleSocketServer(Socket s, int i) {
 		this.connection = s;
 		this.ID = i;
