@@ -4,6 +4,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+/*Code derived from http://edn.embarcadero.com/article/31995*/
 public class MultipleSocketServer implements Runnable {
 
 	private Socket connection;
