@@ -17,14 +17,16 @@ public class MultipleSocketServer implements Runnable {
 	}
 	
 	public static void main(String[] args) {
-		int port = 19999;
+		int port = 2500;
 		int count = 0;
 		try{
 			ServerSocket socket1 = new ServerSocket(port);
 			System.out.println("MultipleSocketServer Initialized");
+			int number = 0;
 			while (true) {
 				System.out.println("connecting to client");
 				Socket clientSocket = socket1.accept(); //this is the connection to the client
+				System.out.println("connected to client now");
 				Runnable runnable = new MultipleSocketServer(clientSocket, ++count);
 				Thread thread = new Thread(runnable);
 				thread.start();
