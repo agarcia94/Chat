@@ -14,10 +14,11 @@ public class MultipleSocketServer implements Runnable {
 	public MultipleSocketServer(Socket s, int i) {
 		this.connection = s;
 		this.ID = i;
+		//test
 	}
 	
 	public static void main(String[] args) {
-		int port = 2500;
+		int port = 8080;
 		int count = 0;
 		try{
 			ServerSocket socket1 = new ServerSocket(port);
