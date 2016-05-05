@@ -14,7 +14,7 @@ public class Chat {
 	private ServerSocket listenerSocket;
 	private Socket clientSocket;
 	private int listeningPort;
-	private HashMap<String, Integer> addressList;
+	private HashMap<Integer, String> addressList;
 	
 	public Chat(int port){
 		listenerSocket = null;
@@ -90,12 +90,21 @@ public class Chat {
 		
 
 	}
-	
 
-	public static void list(){
+	public void list(){
 		//Check if there any connected peers
+		if(addressList.isEmpty()){
+			System.out.println("No Connected peers to Show");
+		}
 		//if not, return no peers conected
 		//else
+		else{
+			System.out.println("ID:               IP Address                     Port Number");
+			for(String people : addressList){
+				System.out.println(x);
+				
+			}
+		}
 		//show System.out.println("ID:               IP Address                     Port Number");
 		//for every peer	
 	}
