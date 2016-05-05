@@ -17,25 +17,25 @@ public class MultipleSocketServer implements Runnable {
 		//test
 	}
 	
-	public static void main(String[] args) {
-		int port = 4444;
-		int count = 0;
-		try{
-			ServerSocket socket1 = new ServerSocket(port);
-			System.out.println(InetAddress.getLocalHost().getHostAddress());
-			System.out.println("MultipleSocketServer Initialized");
-			int number = 0;
-			while (true) {
-				System.out.println("connecting to client");
-				Socket clientSocket = socket1.accept(); //this is the connection to the client
-				System.out.println("connected to client now");
-				Runnable runnable = new MultipleSocketServer(clientSocket, ++count);
-				Thread thread = new Thread(runnable);
-				thread.start();
-			}
-		}
-		catch (Exception e) {e.printStackTrace();}
-	}
+//	public static void main(String[] args) {
+//		int port = 4444;
+//		int count = 0;
+//		try{
+//			ServerSocket socket1 = new ServerSocket(port);
+//			System.out.println(InetAddress.getLocalHost().getHostAddress());
+//			System.out.println("MultipleSocketServer Initialized");
+//			int number = 0;
+//			while (true) {
+//				System.out.println("connecting to client");
+//				Socket clientSocket = socket1.accept(); //this is the connection to the client
+//				System.out.println("connected to client now");
+//				Runnable runnable = new MultipleSocketServer(clientSocket, ++count);
+//				Thread thread = new Thread(runnable);
+//				thread.start();
+//			}
+//		}
+//		catch (Exception e) {e.printStackTrace();}
+//	}
 
 
 
