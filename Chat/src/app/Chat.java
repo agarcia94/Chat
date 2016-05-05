@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.io.*;
 
+import client.Client;
+
 public class Chat {
 	
 	private int id;  //differentiate between which IP connection
@@ -77,8 +79,7 @@ public class Chat {
 				
 				try {
 					clientSocket = listenerSocket.accept();
-					
-					//Create client object that implements Runnable
+					new Thread(new Client(clientSocket)).start();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -90,6 +91,7 @@ public class Chat {
 
 	}
 	
+
 	public static void list(){
 		//Check if there any connected peers
 		//if not, return no peers conected
@@ -143,6 +145,7 @@ public class Chat {
 //	class MultipleSocketServer{
 //		int ID;
 //	}
+
 	
 	public static void main(String[] args){
 		int port = Integer.parseInt(args[0]);
