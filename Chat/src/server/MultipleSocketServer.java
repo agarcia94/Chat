@@ -18,10 +18,11 @@ public class MultipleSocketServer implements Runnable {
 	}
 	
 	public static void main(String[] args) {
-		int port = 8080;
+		int port = 4444;
 		int count = 0;
 		try{
 			ServerSocket socket1 = new ServerSocket(port);
+			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			System.out.println("MultipleSocketServer Initialized");
 			int number = 0;
 			while (true) {
@@ -33,7 +34,7 @@ public class MultipleSocketServer implements Runnable {
 				thread.start();
 			}
 		}
-		catch (Exception e) {}
+		catch (Exception e) {e.printStackTrace();}
 	}
 
 
