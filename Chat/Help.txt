@@ -1,0 +1,36 @@
+------------------------------------------------------------------------------------------------
+										Help Menu
+------------------------------------------------------------------------------------------------
+
+1) help
+	Usage: help
+	Description: Displays commands and options
+	
+2)myip
+	Usage: myip
+	Description: Displays IP Address
+	
+3) myport
+	Usage: myport
+	Description: Displays listening port number
+	
+4) connect
+	Usage: connect[destination IP] [port#]
+	Description: Establish connection with [destination IP] using [port #]
+	
+5) list
+	Usage: list
+	Description: Displays a numbered list of all connections the process is part of 
+
+6) terminate 
+	Usage: terminate [connection ID]
+	Description: terminates the given connection with IP address of [connection ID]
+
+7) send
+	Usage: send [connection ID] [Message]
+	Description: Send [Message] to IP address of [connection ID]
+	
+8) exit
+	Usage: exit
+	Description: Closes all connections and terminates the process.
+------------------------------------------------------------------------------------------------

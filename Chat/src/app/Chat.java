@@ -2,6 +2,7 @@ package app;
 
 import java.net.*;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.io.*;
 
 public class Chat {
@@ -20,6 +21,16 @@ public class Chat {
 		clientSocket = null;
 		id = 0;
 		addressList = new HashMap<>();
+	}
+	
+	//Displays the menu for commands for the user to see. Uses text file
+	public static void help() throws FileNotFoundException, IOException{
+		try (BufferedReader br = new BufferedReader(new FileReader("Help.txt"))) {
+			   String line = null;
+			   while ((line = br.readLine()) != null) {
+			       System.out.println(line);
+			   }
+			}	
 	}
 	
 	//Display the IP address of local computer
@@ -78,6 +89,56 @@ public class Chat {
 		
 
 	}
+	
+	public static void list(){
+		//Check if there any connected peers
+		//if not, return no peers conected
+		//else
+		//show System.out.println("ID:               IP Address                     Port Number");
+		//for every peer	
+	}
+	
+	/*
+	 * Needed??
+	public static void mainMenu(){
+		
+		Scanner in = new Scanner(System.in);
+		System.out.println("Please Enter a Command: ");
+		String command = in.nextLine();
+		String errorMessage;
+
+        switch (msg) {
+            case "help":
+            	help();
+                break;
+            case "myip":
+            	myip();
+                break;
+            case "myport":
+            	myport();
+                break;
+            case "connect????"
+            	connect(ip,port#);
+                break;
+            case "list":
+            	list();
+                break;
+            case "terminate????"
+            	terminate(ip);
+                break;
+            case "send???"
+            	send(ip,message);
+                break;
+            case "exit":
+            	exit();
+            break;
+            
+            default: errorMessage = "Invalid month";
+            	System.out.println(errorMessage);
+            	break;
+        }
+    }
+    */
 	
 //	class MultipleSocketServer{
 //		int ID;
