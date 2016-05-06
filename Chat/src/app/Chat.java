@@ -51,7 +51,7 @@ public class Chat {
 
 		String address = "";
 		try {
-			address = InetAddress.getLocalHost().getHostAddress();
+			address = Inet4Address.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {
 			System.out.println("Cannot recognize host");
 		}
@@ -77,17 +77,29 @@ public class Chat {
 			clientSocket = listenerSocket.accept(); //wait for client to connect
 			System.out.println("Reading from client socket");
 			
-			new Thread(() -> {
-				while(true){
-					try {
-						new Thread(new ClientHandler(clientSocket)).start();
-					} catch (Exception e) {
-						System.out.println("cannot connect to client");
-						//e.printStackTrace();
-					}
+//			new Thread(() -> {
+//				while(true){
+//					try {
+//						System.out.println("using client thread");
+//						new Thread(new ClientHandler(clientSocket)).start();
+//					} catch (Exception e) {
+//						System.out.println("cannot connect to client");
+//						//e.printStackTrace();
+//					}
+//				}
+//
+//			}).start();
+			
+			
+			while(true){
+				try {
+					//System.out.println("using client thread");
+					new Thread(new ClientHandler(clientSocket)).start();
+				} catch (Exception e) {
+					System.out.println("cannot connect to client");
+					//e.printStackTrace();
 				}
-
-			});
+			}
 			
 			
 			
@@ -102,32 +114,33 @@ public class Chat {
 	//This is more client-oriented
 	public void connect(String ip, int port){
 		
-		try {
-			clientSocket = new Socket(ip, port); //bind the client to the server's ip and port
-			System.out.println("Connecting to server");
-		} catch (IOException e1) {
-			System.out.println("Cannot connect to server");
-			//e1.printStackTrace();
-		}
+//		try {
+//			clientSocket = new Socket(ip, port); //bind the client to the server's ip and port
+//			System.out.println("Connecting to server");
+//		} catch (IOException e1) {
+//			System.out.println("Cannot connect to server");
+//			//e1.printStackTrace();
+//		}
 		
 		
 		//1. Create ServerSocket and bind it to port
 		//2. Call the accept method on that ServerSocket
 		//3. Read the contents from the client socket
 
-//		new Thread(() -> {
-//			while(true){
-//				try {
-//					clientSocket = listenerSocket.accept(); //wait for incoming connection from client
-//					new Thread(new ClientHandler(clientSocket)).start();
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					System.out.println("cannot connect to client");
-//					//e.printStackTrace();
-//				}
-//			}
-//
-//		});
+		new Thread(() -> {
+			while(true){
+				try {
+					clientSocket = listenerSocket.accept(); //wait for incoming connection from client
+					System.out.println("connected to client");
+					new Thread(new ClientHandler(clientSocket)).start();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					System.out.println("cannot connect to client");
+					//e.printStackTrace();
+				}
+			}
+
+		}).start();
 
 
 	}
@@ -198,35 +211,52 @@ public class Chat {
 	public static void main(String[] args){
 		//int port = Integer.parseInt(args[0]); 
 		
-		int port = 2500;
-		Chat chat = new Chat(port);
+		
+		//Chat chat = new Chat(port);
 		
 		Scanner input = new Scanner(System.in);
-		System.out.print("Please provide a command: ");
-		String command = input.nextLine();
+		System.out.print("Port: ");
+		int port = input.nextInt();
 		
-		chat.setupListeningSocket();
+		Chat chat = new Chat(port);
+		String command = "";
 		
-		
-		if(command.equals("help")){
-			try {
-				chat.help();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		do{
+			System.out.print("Provide a command: ");
+			Scanner secondInput = new Scanner(System.in);
+			command = secondInput.nextLine();
+			
+			if(command.equals("help")){
+				try {
+					chat.help();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-		}
-		else if(command.contains("connect")){
-			String[] values = command.split(" ");
-			String destIP = values[1];
-			int destPort = Integer.parseInt(values[2]);
-		}
-		else if(command.equals("list")){
-			chat.list();
-		}
-		else if(command.equals("myip")){
-			System.out.println(chat.myIP());
-		}
+			else if(command.contains("connect")){
+				String[] values = command.split(" ");
+				String destIP = values[1];
+				int destPort = Integer.parseInt(values[2]);
+				chat.connect(destIP, destPort);
+			}
+			else if(command.equals("list")){
+				chat.list();
+			}
+			else if(command.equals("myip")){
+				System.out.println(chat.myIP());
+			}
+			
+		}while(!command.equals("exit"));
+		
+
+		
+		
+			
+
+		
+		
+
 		
 //		do{
 //			System.out.print("Welcome! Please enter a command: ");
