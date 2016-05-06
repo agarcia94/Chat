@@ -46,7 +46,7 @@ public class ClientHandler implements Runnable{
 			while(true){
 				try {
 					String line = input.readLine();
-					System.out.println("stream stuff: " + line);
+					System.out.println(line);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

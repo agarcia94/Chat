@@ -79,6 +79,7 @@ public class Chat {
 			while(true){
 				try {
 					clientSocket = listenerSocket.accept(); //wait for client to connect
+					socketList.put(id++, clientSocket);
 					System.out.println("using client thread");
 					new Thread(new ClientHandler(clientSocket)).start();
 				} catch (Exception e) {
@@ -138,18 +139,21 @@ public class Chat {
 
 	public void list(){
 		//Check if there any connected peers
-		if(addressList.isEmpty()){
+		if(socketList.isEmpty()){
 			System.out.println("No Connected peers to Show");
 			return;
 		}
 		//if not, return no peers conected
 		//else
 		else{
-			System.out.println("ID:               IP Address                     Port Number");
+			System.out.println("ID:  IP Address       Port Number");
 
-//			for(Map.Entry<Integer, String> entry : addressList.entrySet()){
-//
-//			}
+			for(Map.Entry<Integer, Socket> entry : socketList.entrySet()){
+				int id = entry.getKey();
+				Socket value = entry.getValue();
+				
+				System.out.println(id + "  " + value.getInetAddress() + "       " + value.getPort());
+			}
 
 		}
 	
