@@ -152,7 +152,7 @@ public class Chat {
 				int id = entry.getKey();
 				Socket value = entry.getValue();
 				
-				System.out.println(id + "  " + value.getInetAddress() + "       " + value.getPort());
+				System.out.println(id + "   " + value.getInetAddress() + "         " + value.getPort());
 			}
 
 		}
