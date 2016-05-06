@@ -125,7 +125,7 @@ public class Chat {
 		DataOutputStream response;
 		try {
 			response = new DataOutputStream(clientSocket.getOutputStream());
-			response.writeBytes("test" + "\r \n");
+			response.writeBytes(myIP() + " " + listeningPort + "\r \n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
