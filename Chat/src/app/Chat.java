@@ -73,40 +73,21 @@ public class Chat {
 		
 		System.out.println("Waiting for a client to connect...");
 		
-		try {
-			clientSocket = listenerSocket.accept(); //wait for client to connect
-			System.out.println("Reading from client socket");
-			
-//			new Thread(() -> {
-//				while(true){
-//					try {
-//						System.out.println("using client thread");
-//						new Thread(new ClientHandler(clientSocket)).start();
-//					} catch (Exception e) {
-//						System.out.println("cannot connect to client");
-//						//e.printStackTrace();
-//					}
-//				}
-//
-//			}).start();
-			
-			
+		//System.out.println("Reading from client socket");
+		
+		new Thread(() -> {
 			while(true){
 				try {
-					//System.out.println("using client thread");
+					clientSocket = listenerSocket.accept(); //wait for client to connect
+					System.out.println("using client thread");
 					new Thread(new ClientHandler(clientSocket)).start();
 				} catch (Exception e) {
 					System.out.println("cannot connect to client");
 					//e.printStackTrace();
 				}
 			}
-			
-			
-			
-		} catch (IOException e) {
-			System.out.println("cannot create server socket");
-			e.printStackTrace();
-		}
+
+		}).start();
 	}
 
 	//Connect to a client
