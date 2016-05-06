@@ -113,34 +113,44 @@ public class Chat {
 	//Bind the clientSocket to the server's ip and port
 	//This is more client-oriented
 	public void connect(String ip, int port){
+		System.out.println("connecting");
+		try {
+			clientSocket = new Socket(ip, port); //bind the client to the server's ip and port
+			System.out.println("Connecting to server");
+		} catch (IOException e1) {
+			System.out.println("Cannot connect to server");
+			//e1.printStackTrace();
+		}
 		
-//		try {
-//			clientSocket = new Socket(ip, port); //bind the client to the server's ip and port
-//			System.out.println("Connecting to server");
-//		} catch (IOException e1) {
-//			System.out.println("Cannot connect to server");
-//			//e1.printStackTrace();
-//		}
+		DataOutputStream response;
+		try {
+			response = new DataOutputStream(clientSocket.getOutputStream());
+			response.writeBytes("test" + "\r \n");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		
 		//1. Create ServerSocket and bind it to port
 		//2. Call the accept method on that ServerSocket
 		//3. Read the contents from the client socket
 
-		new Thread(() -> {
-			while(true){
-				try {
-					clientSocket = listenerSocket.accept(); //wait for incoming connection from client
-					System.out.println("connected to client");
-					new Thread(new ClientHandler(clientSocket)).start();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					System.out.println("cannot connect to client");
-					//e.printStackTrace();
-				}
-			}
-
-		}).start();
+//		new Thread(() -> {
+//			while(true){
+//				try {
+//					clientSocket = listenerSocket.accept(); //wait for incoming connection from client
+//					System.out.println("connected to client");
+//					new Thread(new ClientHandler(clientSocket)).start();
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					System.out.println("cannot connect to client");
+//					//e.printStackTrace();
+//				}
+//			}
+//
+//		}).start();
 
 
 	}
