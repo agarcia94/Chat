@@ -1,6 +1,8 @@
 package app;
 
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -176,10 +178,15 @@ public class Chat {
 			while(true){
 				try {
 					String line = input.readLine();
+					System.out.println(line);
 					String[] clientInfo = line.split(" ");
+					ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
+					System.out.println("ArrayList client size: " + clientInfoList.size());
 					
 					String ipAddress = clientInfo[0];
+					System.out.println("client IP: " + ipAddress);
 					int clientListenerPort = Integer.parseInt(clientInfo[1]);
+					System.out.println("client listener port: " + clientListenerPort);
 					
 					int tempID = id++;
 					
@@ -242,11 +249,7 @@ public class Chat {
 
 
 	public static void main(String[] args){
-		//int port = Integer.parseInt(args[0]); 
-
-
-		//Chat chat = new Chat(port);
-
+		
 		Scanner input = new Scanner(System.in);
 		System.out.print("Port: ");
 		int port = input.nextInt();
