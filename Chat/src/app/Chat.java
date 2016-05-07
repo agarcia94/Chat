@@ -88,8 +88,8 @@ public class Chat {
 					clientSocket = listenerSocket.accept(); //wait for client to connect
 					//int newID = id++;
 
-//					Client client = new Client(newID, myIP(), getPortNumber());
-//					clientList.put(newID, client);
+					//					Client client = new Client(newID, myIP(), getPortNumber());
+					//					clientList.put(newID, client);
 					System.out.println("using client thread");
 					new Thread(new ClientHandler(clientSocket)).start();
 				} catch (Exception e) {
@@ -175,30 +175,32 @@ public class Chat {
 				e1.printStackTrace();
 			}
 
-			while(true){
-				try {
-					String line = input.readLine();
-					System.out.println(line);
-					String[] clientInfo = line.split(" ");
-					ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
-					System.out.println("ArrayList client size: " + clientInfoList.size());
-					
-					String ipAddress = clientInfo[0];
-					System.out.println("client IP: " + ipAddress);
-					int clientListenerPort = Integer.parseInt(clientInfo[1]);
-					System.out.println("client listener port: " + clientListenerPort);
-					
-					int tempID = id++;
-					
-					Client client  = new Client(tempID, ipAddress, clientListenerPort);
-					clientList.put(tempID, client);
-					clientStreamList.put(client, new DataOutputStream(connectionSocket.getOutputStream()));
-					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
+			try {
+				String line = input.readLine();
+				System.out.println(line);
+				String[] clientInfo = line.split(" ");
+				ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
+				System.out.println("ArrayList client size: " + clientInfoList.size());
+
+				
+				String ipAddress = clientInfo[0];
+				System.out.println("client IP: " + ipAddress);
+
+				int clientListenerPort = Integer.parseInt(clientInfo[1]);
+				System.out.println("client listener port: " + clientListenerPort);
+
+				int tempID = id++;
+
+				Client client  = new Client(tempID, ipAddress, clientListenerPort);
+				clientList.put(tempID, client);
+				clientStreamList.put(client, new DataOutputStream(connectionSocket.getOutputStream()));
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+
 
 		}
 
@@ -249,7 +251,7 @@ public class Chat {
 
 
 	public static void main(String[] args){
-		
+
 		Scanner input = new Scanner(System.in);
 		System.out.print("Port: ");
 		int port = input.nextInt();
