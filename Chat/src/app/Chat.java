@@ -152,7 +152,7 @@ public class Chat {
 				int id = entry.getKey();
 				Socket value = entry.getValue();
 				
-				System.out.println(id + "   " + value.getInetAddress() + "         " + value.getPort());
+				System.out.println(id + "   " + value.getInetAddress() + "         " + value.getLocalPort());
 			}
 
 		}
@@ -242,22 +242,12 @@ public class Chat {
 			else if(command.equals("myip")){
 				System.out.println(chat.myIP());
 			}
+			else if(command.equals("myport")){
+				System.out.println(chat.getPortNumber());
+			}
+			
 			
 		}while(!command.equals("exit"));
-		
-
-		
-		
-			
-
-		
-		
-
-		
-//		do{
-//			System.out.print("Welcome! Please enter a command: ");
-//			command = input.next();
-//		}while(!command.equalsIgnoreCase("exit"));
 
 
 	}
