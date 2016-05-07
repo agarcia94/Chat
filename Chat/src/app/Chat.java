@@ -22,7 +22,8 @@ public class Chat {
 	//private HashMap<Integer, String> addressList;
 	private HashMap<Integer, Client> clientList;
 	private HashMap<Client, DataOutputStream> clientStreamList;
-
+	private HashMap<Client, Socket> clientSocketMap;
+	
 	public Chat(int port){
 		listeningPort = port;
 
@@ -40,6 +41,7 @@ public class Chat {
 		clientList = new HashMap<>();
 		client = null;
 		clientStreamList = new HashMap<>();
+		clientSocketMap = new HashMap<>();
 		System.out.println("Welcome!");
 	}
 
@@ -194,6 +196,7 @@ public class Chat {
 
 				Client client  = new Client(tempID, ipAddress, clientListenerPort);
 				clientList.put(tempID, client);
+				clientSocketMap.put(client, connectionSocket);
 				clientStreamList.put(client, new DataOutputStream(connectionSocket.getOutputStream()));
 
 			} catch (IOException e) {
