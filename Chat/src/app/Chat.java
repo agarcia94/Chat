@@ -301,7 +301,15 @@ public class Chat {
 				while(true){
 					String line = input.readLine();
 					System.out.println(line);
-					String[] clientInfo = line.split(" ");
+					
+					String[] clientInfo = null;
+					
+					try{
+						clientInfo = line.split(" ");
+					}catch(NullPointerException o){
+						return;
+					}
+					
 					ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
 					//System.out.println("Client ArrayList size: " + clientInfoList.size());
 					
