@@ -130,8 +130,17 @@ public class Chat {
 		else{
 			System.out.println("You have 3 peers connected to you. You can have no more than 3.");
 		}
+	}
+	
 
+	
 
+	public void exit() {
+		for (int i = 0; i < clientList.size(); i++) {
+			terminate(i);
+		}
+		System.out.println("Program now exiting.");
+		System.exit(0);
 	}
 
 	
@@ -174,13 +183,14 @@ public class Chat {
 		//2. Call the accept method on that ServerSocket
 		//3. Read the contents from the client socket
 	}
+
 	
 	/**
 	 * Terminate connection with specific client
 	 * @param id ID of client to disconnect from
 	 */
 	public void terminate(int id) {
-		System.out.println("Terminating...");
+		
 		Client c;
 		Socket s;
 		try {
@@ -346,6 +356,7 @@ public class Chat {
 				String[] values = command.split(" ");
 				String id = values[1];
 				int termId = Integer.parseInt(id);
+				System.out.println("Terminating...");
 				chat.terminate(termId);
 			}
 			else if(command.contains("send")){
@@ -356,9 +367,13 @@ public class Chat {
 			}
 
 
-		}while(!chat.clientSocket.isClosed());
+		}while(!command.equals("exit"));
 
+		if (command.equals("exit")) {
+			chat.exit();
+		}
 
+		
 	}
 	
 	
