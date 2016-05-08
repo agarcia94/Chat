@@ -121,7 +121,6 @@ public class Chat {
 						System.out.println("amount of clients connected to me: " + clientList.size());
 						if(clientList.size() >= 3){
 							System.out.println("Cannot be connected to more than 3 peers");
-							Thread.currentThread().stop();
 						}
 						
 						clientSocket = listenerSocket.accept(); //wait for client to connect
