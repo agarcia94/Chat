@@ -137,7 +137,7 @@ public class Chat {
 
 	public void exit() {
 		for (int i = 0; i < clientList.size(); i++) {
-			terminate(i);
+			if (clientList.containsKey(i)) terminate(i);
 		}
 		System.out.println("Program now exiting.");
 		System.exit(0);
@@ -221,7 +221,7 @@ public class Chat {
 	}
 
 	/** List the peers connected to this host*/
-	public void list(){
+	public void list() {
 		//Check if there any connected peers
 		if(clientList.isEmpty()){
 			System.out.println("No peers are currently connected.");
@@ -314,16 +314,18 @@ public class Chat {
 
 					int clientListenerPort = Integer.parseInt(clientInfo[1]);
 					System.out.println("Client port number: " + clientListenerPort);
+					
+					int tempID = id++;
+					
+					Client client  = new Client(tempID, ipAddress, clientListenerPort);
+					clientList.put(tempID, client);
+					clientSocketMap.put(client, connectionSocket);
+					clientStreamList.put(client, new DataOutputStream(connectionSocket.getOutputStream()));
 				}
 
 
 
-				//int tempID = id++;
 
-//				Client client  = new Client(tempID, ipAddress, clientListenerPort);
-//				clientList.put(tempID, client);
-//				clientSocketMap.put(client, connectionSocket);
-//				clientStreamList.put(client, new DataOutputStream(connectionSocket.getOutputStream()));
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
