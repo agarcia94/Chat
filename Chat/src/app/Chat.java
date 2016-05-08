@@ -21,7 +21,7 @@ import client.Client;
  * @since 5/7/2016
  */
 public class Chat {
-	private int maxNumPeers;
+	public static int maxNumPeers;
 
 	private int id;  //differentiate between which IP connection
 	private String hostAddress;
@@ -30,7 +30,7 @@ public class Chat {
 	private int listeningPort;
 	private Client client;
 	//private HashMap<Integer, String> addressList;
-	private HashMap<Integer, Client> clientList;
+	public static HashMap<Integer, Client> clientList;
 	private HashMap<Client, DataOutputStream> clientStreamList;
 	private HashMap<Client, Socket> clientSocketMap;
 	
@@ -315,7 +315,7 @@ public class Chat {
 						System.out.println("I'm connected to other peer now");
 					}
 					else if(line.startsWith("r")){
-						System.out.println("response: " + clientInfo[1]);
+						System.out.println("response: " + line);
 					}
 					else if(line.startsWith("m")){
 						System.out.println("Message received is " + line);
