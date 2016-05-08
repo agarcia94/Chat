@@ -312,12 +312,12 @@ public class Chat {
 					int clientListenerPort = Integer.parseInt(clientInfo[1]);
 					System.out.println("Client port number: " + clientListenerPort);
 					
-					int tempID = id++;
-					
-					Client client  = new Client(tempID, ipAddress, clientListenerPort);
-					clientList.put(tempID, client);
-					clientSocketMap.put(client, connectionSocket);
-					clientStreamList.put(client, new DataOutputStream(connectionSocket.getOutputStream()));
+//					int tempID = id++;
+//					
+//					Client client  = new Client(tempID, ipAddress, clientListenerPort);
+//					clientList.put(tempID, client);
+//					clientSocketMap.put(client, connectionSocket);
+//					clientStreamList.put(client, new DataOutputStream(connectionSocket.getOutputStream()));
 				}
 
 
