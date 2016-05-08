@@ -161,6 +161,18 @@ public class Chat {
 				System.out.println("Cannot connect to server!");
 				//e1.printStackTrace();
 			}
+			
+			int tempID = id++;
+
+			Client client  = new Client(tempID, ip, port);
+			clientList.put(tempID, client);
+			clientSocketMap.put(client, clientSocket);
+			try {
+				clientStreamList.put(client, new DataOutputStream(clientSocket.getOutputStream()));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 			DataOutputStream response;
 			try {
@@ -240,21 +252,13 @@ public class Chat {
 		Client client = clientList.get(id);
 		DataOutputStream clientStream = clientStreamList.get(client);
 		try {
-			if(message.length() < 100){
-				clientStream.writeBytes("Message received from " + client.getAddress() + "\r \n");
-				clientStream.writeBytes("Sender's Port: " + client.getPort() + "\r \n");
-				clientStream.writeBytes("Message: " + message + "\r \n");
-				
-				System.out.println("message sent to connection id" + id);
-			}
-			else{
-				System.out.println("Message must be under 100 characters");
-			}
-
+			clientStream.writeBytes("Message received from " + myIP());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		
 	}
 	
 	/**
@@ -288,19 +292,26 @@ public class Chat {
 				String[] clientInfo = line.split(" ");
 				ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
 				System.out.println("Client ArrayList size: " + clientInfoList.size());
+				
+				if(clientInfo[0].contains("Message")){
+					System.out.println("I got a message");
+				}
+				else{
+					String ipAddress = clientInfo[0];
+					System.out.println("Client IP: " + ipAddress);
 
-				String ipAddress = clientInfo[0];
-				System.out.println("Client IP: " + ipAddress);
+					int clientListenerPort = Integer.parseInt(clientInfo[1]);
+					System.out.println("Client port number: " + clientListenerPort);
+				}
 
-				int clientListenerPort = Integer.parseInt(clientInfo[1]);
-				System.out.println("Client port number: " + clientListenerPort);
 
-				int tempID = id++;
 
-				Client client  = new Client(tempID, ipAddress, clientListenerPort);
-				clientList.put(tempID, client);
-				clientSocketMap.put(client, connectionSocket);
-				clientStreamList.put(client, new DataOutputStream(connectionSocket.getOutputStream()));
+				//int tempID = id++;
+
+//				Client client  = new Client(tempID, ipAddress, clientListenerPort);
+//				clientList.put(tempID, client);
+//				clientSocketMap.put(client, connectionSocket);
+//				clientStreamList.put(client, new DataOutputStream(connectionSocket.getOutputStream()));
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -367,7 +378,9 @@ public class Chat {
 			}
 
 
+
 		}while(!command.equals("exit"));
+
 
 		if (command.equals("exit")) {
 			chat.exit();
