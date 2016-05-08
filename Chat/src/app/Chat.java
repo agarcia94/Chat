@@ -416,7 +416,7 @@ public class Chat {
 				int destID = Integer.parseInt(values[1]);
 				String message = "";
 				for (int i = 2; i < values.length; i++) {
-					message += values[i];
+					message += values[i] + " ";
 				}
 				//String message = values[2];
 				
