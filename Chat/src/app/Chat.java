@@ -11,7 +11,17 @@ import java.io.*;
 import client.Client;
 import client.ClientHandler;
 
+
+/**
+ * Chat application where peers can communicate with each other
+ * @author Andrew Garcia
+ * @author Claudia Seidel
+ * @author Alex Perez
+ * @version 1.0
+ * @since 5/7/2016
+ */
 public class Chat {
+	private int maxNumPeers;
 
 	private int id;  //differentiate between which IP connection
 	private String hostAddress;
@@ -24,8 +34,13 @@ public class Chat {
 	private HashMap<Client, DataOutputStream> clientStreamList;
 	private HashMap<Client, Socket> clientSocketMap;
 	
+	/**
+	 * Chat constructor
+	 * @param port the port the server socket will be bound to
+	 */
 	public Chat(int port){
 		listeningPort = port;
+		maxNumPeers = 0;
 
 		try {
 			listenerSocket = new ServerSocket(listeningPort);
@@ -45,8 +60,12 @@ public class Chat {
 		System.out.println("Welcome!");
 	}
 
-	//Displays the menu for commands for the user to see. Uses text file
-	public void help() throws FileNotFoundException, IOException{
+	
+	/**
+	 * Displays the menu for commands for the user to see. Uses text file
+	 * @throws IOException Thrown if file not found or error reading the file
+	 */
+	public void help() throws IOException{
 		try (BufferedReader br = new BufferedReader(new FileReader("Help.txt"))) {
 			String line = null;
 			while ((line = br.readLine()) != null) {
@@ -54,8 +73,11 @@ public class Chat {
 			}
 		}	
 	}
-
-	//Display the IP address of local computer
+	
+	/**
+	 * Display the IP address of local computer
+	 * @return IP address of local computer as a string
+	 */
 	public String myIP(){
 
 		String address = "";
@@ -70,62 +92,81 @@ public class Chat {
 
 	}
 
-	//Call this when we use the myport command
+	
+	/**
+	 * Get the listening port number for the host
+	 * @return listening port for the host
+	 */
 	public int getPortNumber(){
 		return listeningPort;
 	}
 
-	//Setup the server socket
-	//Wait for any connection requests
-	//Read from the client socket once the connection is made
+	
+	/**
+	 * Setup the server socket. This method waits for any connection requests from clients.
+	 * Once a connection is established, the IP address and the listening port number for 
+	 * the client is extracted.
+	 */
 	public void setupListeningSocket(){
 
 		System.out.println("Waiting for a client to connect...");
 
 		//System.out.println("Reading from client socket");
-
-		new Thread(() -> {
-			while(true){
-				try {
-					clientSocket = listenerSocket.accept(); //wait for client to connect
-					//int newID = id++;
-
-					//					Client client = new Client(newID, myIP(), getPortNumber());
-					//					clientList.put(newID, client);
-					System.out.println("\nUsing client thread ");
-					new Thread(new ClientHandler(clientSocket)).start();
-				} catch (Exception e) {
-					System.out.println("Cannot connect to client!");
-					//e.printStackTrace();
+		
+		if(clientList.size() < 3){
+			new Thread(() -> {
+				while(true){
+					try {
+						clientSocket = listenerSocket.accept(); //wait for client to connect
+						System.out.println("Connected!");
+						new Thread(new ClientHandler(clientSocket)).start();
+					} catch (Exception e) {
+						System.out.println("Cannot connect to client!");
+					}
 				}
+
+			}).start();
+		}
+		else{
+			System.out.println("You have 3 peers connected to you. You can have no more than 3.");
+		}
+
+
+	}
+
+	
+	/**
+	 * Allows client to connect to server/host
+	 * @param ip host IP address to bind client socket to
+	 * @param port listening port number for host
+	 */
+	public void connect(String ip, int port){
+		
+		if(maxNumPeers < 3){
+			System.out.println("Connecting...");
+			try {
+				clientSocket = new Socket(ip, port); //bind the client to the server's ip and port
+				maxNumPeers++;
+				System.out.println("Connected!");
+			} catch (IOException e1) {
+				System.out.println("Cannot connect to server!");
+				//e1.printStackTrace();
 			}
 
-		}).start();
-	}
-	
-
-
-	//Connect to a client
-	//Bind the clientSocket to the server's ip and port
-	//This is more client-oriented
-	public void connect(String ip, int port){
-		System.out.println("Connecting...");
-		try {
-			clientSocket = new Socket(ip, port); //bind the client to the server's ip and port
-			System.out.println("Connecting to server...");
-		} catch (IOException e1) {
-			System.out.println("Cannot connect to server!");
-			//e1.printStackTrace();
+			DataOutputStream response;
+			try {
+				response = new DataOutputStream(clientSocket.getOutputStream());
+				response.writeBytes(myIP() + " " + listeningPort + "\r \n");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
-		DataOutputStream response;
-		try {
-			response = new DataOutputStream(clientSocket.getOutputStream());
-			response.writeBytes(myIP() + " " + listeningPort + "\r \n");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		else{
+			System.out.println("Cannot connect to more than 3 peers");
 		}
+		
+
 
 
 
@@ -134,6 +175,10 @@ public class Chat {
 		//3. Read the contents from the client socket
 	}
 	
+	/**
+	 * Terminate connection with specific client
+	 * @param id ID of client to disconnect from
+	 */
 	public void terminate(int id) {
 		System.out.println("Terminating...");
 		Client c;
@@ -153,6 +198,7 @@ public class Chat {
 		}
 	}
 
+	/** List the peers connected to this host*/
 	public void list(){
 		//Check if there any connected peers
 		if(clientList.isEmpty()){
@@ -174,7 +220,10 @@ public class Chat {
 		}
 
 	}
-
+	
+	/**
+	 * Helper class designed to extract the IP address and listening port number from the client socket
+	 */
 	private class ClientHandler implements Runnable{
 		private Socket connectionSocket;
 
