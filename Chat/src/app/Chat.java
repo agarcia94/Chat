@@ -313,8 +313,9 @@ public class Chat {
 		Chat chat = new Chat(port);
 		String command = "";
 		chat.setupListeningSocket();
-
+		
 		do{
+
 			System.out.print("Provide a command: ");
 			Scanner secondInput = new Scanner(System.in);
 			command = secondInput.nextLine();
@@ -355,7 +356,7 @@ public class Chat {
 			}
 
 
-		}while(!command.equals("exit"));
+		}while(!chat.clientSocket.isClosed());
 
 
 	}
