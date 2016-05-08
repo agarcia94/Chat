@@ -118,7 +118,7 @@ public class Chat {
 				while(true){
 					try {
 						clientSocket = listenerSocket.accept(); //wait for client to connect
-						System.out.println("Connected!");
+						System.out.println("This host connected to client!");
 						new Thread(new ClientHandler(clientSocket)).start();
 					} catch (Exception e) {
 						System.out.println("Cannot connect to client!");
@@ -177,7 +177,7 @@ public class Chat {
 			DataOutputStream response;
 			try {
 				response = new DataOutputStream(clientSocket.getOutputStream());
-				response.writeBytes("c " + myIP() + " " + listeningPort + "\r \n");
+				response.writeBytes("c" + " " + myIP() + " " + listeningPort + "\r\n");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -256,7 +256,7 @@ public class Chat {
 
 		//new Thread(new ClientHandler(communicationSocket)).start();
 		
-		communicationStream.writeBytes("Message from " + myIP() + "\r \n");
+		communicationStream.writeBytes("m" + " " + "Message from:" + " " + myIP() + "\r\n");
 		
 		
 		
@@ -298,7 +298,7 @@ public class Chat {
 					ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
 					//System.out.println("Client ArrayList size: " + clientInfoList.size());
 					
-					if(clientInfo[0].startsWith("c")){
+					if(line.startsWith("c")){
 						String clientAddress = clientInfo[1];
 						int clientListeningPort = Integer.parseInt(clientInfo[2]);
 						
@@ -310,9 +310,15 @@ public class Chat {
 						clientSocketMap.put(client, connectionSocket);
 						
 						DataOutputStream response = new DataOutputStream(connectionSocket.getOutputStream());
-						response.writeBytes("I got your connect message");
+						response.writeBytes("r" + " " + "I got your connect message" + "\r\n");
 						
 						System.out.println("I'm connected to other peer now");
+					}
+					else if(line.startsWith("r")){
+						System.out.println("response: " + clientInfo[1]);
+					}
+					else if(line.startsWith("m")){
+						System.out.println("Message received is " + line);
 					}
 					
 //					if(clientInfo[0].contains("Message")){
