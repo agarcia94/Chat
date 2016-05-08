@@ -307,6 +307,11 @@ public class Chat {
 			}
 			else if(command.equals("myport")){
 				System.out.println(chat.getPortNumber());
+			} else if (command.contains("terminate")) {
+				String[] values = command.split(" ");
+				String id = values[1];
+				int termid = Integer.parseInt(id);
+				chat.terminate(termid);
 			}
 
 
