@@ -254,8 +254,21 @@ public class Chat {
 		Socket communicationSocket = clientSocketMap.get(client);
 		DataOutputStream communicationStream = new DataOutputStream(communicationSocket.getOutputStream());
 
-		communicationStream.writeBytes("Message from " + myIP());
-		//new Thread(new ClientHandler(communicationSocket)).start();
+		communicationStream.writeBytes("Message from " + myIP() + "\r \n");
+		
+		BufferedReader input = null;
+		input = new BufferedReader
+				(new InputStreamReader(communicationSocket.getInputStream()));
+		
+		String line = input.readLine();
+		System.out.println("content from socket: " + line);
+		
+		
+		
+		new Thread (() -> {
+			new Thread(new ClientHandler(communicationSocket)).start();
+		}).start();
+		
 		
 		
 	}
