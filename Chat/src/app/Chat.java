@@ -247,17 +247,16 @@ public class Chat {
 	 * Send a message to a peer of your choice
 	 * @param id ID of client to send message to 
 	 * @param message The message that will be sent to the other peer
+	 * @throws IOException If error occurs while accessing the output stream from a client
 	 */
-	public void send(int id, String message){
+	public void send(int id, String message) throws IOException{
 		Client client = clientList.get(id);
-		DataOutputStream clientStream = clientStreamList.get(client);
-		try {
-			clientStream.writeBytes("Message received from " + myIP());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Socket communicationSocket = clientSocketMap.get(client);
+		DataOutputStream communicationStream = new DataOutputStream(communicationSocket.getOutputStream());
 
+		communicationStream.writeBytes("Message from " + myIP());
+		//new Thread(new ClientHandler(communicationSocket)).start();
+		
 		
 	}
 	
@@ -374,7 +373,13 @@ public class Chat {
 				String[] values = command.split(" ");
 				int destID = Integer.parseInt(values[1]);
 				String message = values[2];
-				chat.send(destID, message);
+				
+				try {
+					chat.send(destID, message);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 
