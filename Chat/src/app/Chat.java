@@ -113,10 +113,17 @@ public class Chat {
 
 		//System.out.println("Reading from client socket");
 		
-		if(clientList.size() < 3){
+		
+			
 			new Thread(() -> {
 				while(true){
 					try {
+						System.out.println("amount of clients connected to me: " + clientList.size());
+						if(clientList.size() >= 3){
+							System.out.println("Cannot be connected to more than 3 peers");
+							Thread.currentThread().stop();
+						}
+						
 						clientSocket = listenerSocket.accept(); //wait for client to connect
 						System.out.println("This host connected to client!");
 						new Thread(new ClientHandler(clientSocket)).start();
@@ -126,10 +133,7 @@ public class Chat {
 				}
 
 			}).start();
-		}
-		else{
-			System.out.println("You have 3 peers connected to you. You can have no more than 3.");
-		}
+	
 	}
 	
 
