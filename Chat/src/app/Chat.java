@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.io.*;
 
 import client.Client;
-import client.ClientHandler;
+//import client.ClientHandler;
 
 
 /**
@@ -346,6 +346,12 @@ public class Chat {
 				String id = values[1];
 				int termId = Integer.parseInt(id);
 				chat.terminate(termId);
+			}
+			else if(command.contains("send")){
+				String[] values = command.split(" ");
+				int destID = Integer.parseInt(values[1]);
+				String message = values[2];
+				chat.send(destID, message);
 			}
 
 
