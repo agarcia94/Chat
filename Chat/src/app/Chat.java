@@ -222,6 +222,32 @@ public class Chat {
 	}
 	
 	/**
+	 * Send a message to a peer of your choice
+	 * @param id ID of client to send message to 
+	 * @param message The message that will be sent to the other peer
+	 */
+	public void send(int id, String message){
+		Client client = clientList.get(id);
+		DataOutputStream clientStream = clientStreamList.get(client);
+		try {
+			if(message.length() < 100){
+				clientStream.writeBytes("Message received from " + client.getAddress() + "\r \n");
+				clientStream.writeBytes("Sender's Port: " + client.getPort() + "\r \n");
+				clientStream.writeBytes("Message: " + message + "\r \n");
+				
+				System.out.println("message sent to connection id" + id);
+			}
+			else{
+				System.out.println("Message must be under 100 characters");
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Helper class designed to extract the IP address and listening port number from the client socket
 	 */
 	private class ClientHandler implements Runnable{
@@ -253,7 +279,6 @@ public class Chat {
 				ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
 				System.out.println("Client ArrayList size: " + clientInfoList.size());
 
-				
 				String ipAddress = clientInfo[0];
 				System.out.println("Client IP: " + ipAddress);
 
@@ -276,48 +301,6 @@ public class Chat {
 		}
 
 	}
-
-	/*
-	 * Needed??
-	public static void mainMenu(){
-
-		Scanner in = new Scanner(System.in);
-		System.out.println("Please Enter a Command: ");
-		String command = in.nextLine();
-		String errorMessage;
-
-        switch (msg) {
-            case "help":
-            	help();
-                break;
-            case "myip":
-            	myip();
-                break;
-            case "myport":
-            	myport();
-                break;
-            case "connect????"
-            	connect(ip,port#);
-                break;
-            case "list":
-            	list();
-                break;
-            case "terminate????"
-            	terminate(ip);
-                break;
-            case "send???"
-            	send(ip,message);
-                break;
-            case "exit":
-            	exit();
-            break;
-
-            default: errorMessage = "Invalid month";
-            	System.out.println(errorMessage);
-            	break;
-        }
-    }
-	 */
 
 
 
