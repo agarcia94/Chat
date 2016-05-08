@@ -349,7 +349,7 @@ public class Chat {
 							
 							if(client.getAddress().equals(address) &&
 									client.getPort() == port){
-								removeID = id;
+								//removeID = id;
 								clientToRemove = client;
 								break;
 							}
@@ -360,7 +360,7 @@ public class Chat {
 //						closingSocket.shutdownInput();
 //						closingSocket.shutdownOutput();
 //						closingSocket.close();
-						clientList.remove(removeID);
+						clientList.remove(clientToRemove.getId());
 						clientSocketMap.remove(clientToRemove);
 						System.out.println("Successfully terminated connection");
 					}
