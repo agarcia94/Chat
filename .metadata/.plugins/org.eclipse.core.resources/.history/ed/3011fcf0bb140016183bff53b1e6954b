@@ -102,14 +102,12 @@ public class Chat {
 
 		}).start();
 	}
-	
-
 
 	//Connect to a client
 	//Bind the clientSocket to the server's ip and port
 	//This is more client-oriented
 	public void connect(String ip, int port){
-		System.out.println("Connecting...");
+		System.out.println("connecting");
 		try {
 			clientSocket = new Socket(ip, port); //bind the client to the server's ip and port
 			System.out.println("Connecting to server...");
@@ -135,7 +133,7 @@ public class Chat {
 	}
 	
 	public void terminate(int id) {
-		System.out.println("Terminating...");
+		System.out.println("Terminating.....");
 		Client c;
 		Socket s;
 		try {
@@ -146,7 +144,7 @@ public class Chat {
 			s.close();
 			clientSocketMap.remove(s);
 			clientList.remove(id);
-			System.out.println("Socket at " + c.getAddress() + " and port " + c.getPort() + " was closed!");
+			System.out.println("Socket closed!");
 		} catch (Exception e1) {
 			System.out.println("Cannot find socket at that ID!");
 			//e1.printStackTrace();
@@ -156,10 +154,10 @@ public class Chat {
 	public void list(){
 		//Check if there any connected peers
 		if(clientList.isEmpty()){
-			System.out.println("No peers are currently connected.");
+			System.out.println("No Connected peers to Show");
 			return;
 		}
-		//if not, return no peers connected
+		//if not, return no peers conected
 		//else
 		else{
 			System.out.println("ID:\tIP Address\tPort Number");
@@ -202,14 +200,14 @@ public class Chat {
 				System.out.println(line);
 				String[] clientInfo = line.split(" ");
 				ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
-				System.out.println("Client ArrayList size: " + clientInfoList.size());
+				System.out.println("ArrayList client size: " + clientInfoList.size());
 
 				
 				String ipAddress = clientInfo[0];
-				System.out.println("Client IP: " + ipAddress);
+				System.out.println("client IP: " + ipAddress);
 
 				int clientListenerPort = Integer.parseInt(clientInfo[1]);
-				System.out.println("Client port number: " + clientListenerPort);
+				System.out.println("client listener port: " + clientListenerPort);
 
 				int tempID = id++;
 

@@ -103,7 +103,9 @@ public class Chat {
 		}).start();
 	}
 	
-
+	public void detectTermination() {
+		
+	}
 
 	//Connect to a client
 	//Bind the clientSocket to the server's ip and port

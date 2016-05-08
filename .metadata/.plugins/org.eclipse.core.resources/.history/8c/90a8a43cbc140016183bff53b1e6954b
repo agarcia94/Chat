@@ -102,8 +102,6 @@ public class Chat {
 
 		}).start();
 	}
-	
-
 
 	//Connect to a client
 	//Bind the clientSocket to the server's ip and port
@@ -209,7 +207,7 @@ public class Chat {
 				System.out.println("Client IP: " + ipAddress);
 
 				int clientListenerPort = Integer.parseInt(clientInfo[1]);
-				System.out.println("Client port number: " + clientListenerPort);
+				System.out.println("Client listener port: " + clientListenerPort);
 
 				int tempID = id++;
 
