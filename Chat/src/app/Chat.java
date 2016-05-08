@@ -33,7 +33,7 @@ public class Chat {
 	public static HashMap<Integer, Client> clientList;
 	private HashMap<Client, DataOutputStream> clientStreamList;
 	private HashMap<Client, Socket> clientSocketMap;
-	
+
 	/**
 	 * Chat constructor
 	 * @param port the port the server socket will be bound to
@@ -60,7 +60,7 @@ public class Chat {
 		System.out.println("Welcome!");
 	}
 
-	
+
 	/**
 	 * Displays the menu for commands for the user to see. Uses text file
 	 * @throws IOException Thrown if file not found or error reading the file
@@ -73,7 +73,7 @@ public class Chat {
 			}
 		}	
 	}
-	
+
 	/**
 	 * Display the IP address of local computer
 	 * @return IP address of local computer as a string
@@ -92,7 +92,7 @@ public class Chat {
 
 	}
 
-	
+
 	/**
 	 * Get the listening port number for the host
 	 * @return listening port for the host
@@ -101,7 +101,7 @@ public class Chat {
 		return listeningPort;
 	}
 
-	
+
 	/**
 	 * Setup the server socket. This method waits for any connection requests from clients.
 	 * Once a connection is established, the IP address and the listening port number for 
@@ -112,31 +112,31 @@ public class Chat {
 		System.out.println("Waiting for a client to connect...");
 
 		//System.out.println("Reading from client socket");
-		
-		
-			
-			new Thread(() -> {
-				while(true){
-					try {
-//						System.out.println("amount of clients connected to me: " + clientList.size());
-//						if(clientList.size() >= 3){
-//							System.out.println("Cannot be connected to more than 3 peers");
-//						}
-						
-						clientSocket = listenerSocket.accept(); //wait for client to connect
-						System.out.println("This host connected to client!");
-						new Thread(new ClientHandler(clientSocket)).start();
-					} catch (Exception e) {
-						System.out.println("Cannot connect to client!");
-					}
+
+
+
+		new Thread(() -> {
+			while(true){
+				try {
+					//						System.out.println("amount of clients connected to me: " + clientList.size());
+					//						if(clientList.size() >= 3){
+					//							System.out.println("Cannot be connected to more than 3 peers");
+					//						}
+
+					clientSocket = listenerSocket.accept(); //wait for client to connect
+					System.out.println("This host connected to client!");
+					new Thread(new ClientHandler(clientSocket)).start();
+				} catch (Exception e) {
+					System.out.println("Cannot connect to client!");
 				}
+			}
 
-			}).start();
-	
+		}).start();
+
 	}
-	
 
-	
+
+
 
 	public void exit() {
 		for (int i = 0; i < clientList.size(); i++) {
@@ -146,14 +146,14 @@ public class Chat {
 		System.exit(0);
 	}
 
-	
+
 	/**
 	 * Allows client to connect to server/host
 	 * @param ip host IP address to bind client socket to
 	 * @param port listening port number for host
 	 */
 	public void connect(String ip, int port){
-		
+
 		if(maxNumPeers < 3){
 			System.out.println("Connecting...");
 			try {
@@ -164,7 +164,7 @@ public class Chat {
 				System.out.println("Cannot connect to server!");
 				//e1.printStackTrace();
 			}
-			
+
 			int tempID = id++;
 
 			Client client  = new Client(tempID, ip, port);
@@ -189,7 +189,7 @@ public class Chat {
 		else{
 			System.out.println("Cannot connect to more than 3 peers");
 		}
-		
+
 
 
 
@@ -199,25 +199,25 @@ public class Chat {
 		//3. Read the contents from the client socket
 	}
 
-	
+
 	/**
 	 * Terminate connection with specific client
 	 * @param id ID of client to disconnect from
 	 */
 	public void terminate(int id) {
-		
+
 		Client c;
 		Socket s;
 		try {
 			c = clientList.get(id); // get the Client at ip 
 			s = clientSocketMap.get(c);
-			
+
 			DataOutputStream terminateNotification = new DataOutputStream(s.getOutputStream());
 			terminateNotification.writeBytes("t" + " " + "Socket at " + this.myIP() + " and port " + this.getPortNumber() + 
 					" is terminating");
-			
+
 			//terminateNotification.writeBytes("ts" + " termination successful");
-			
+
 			s.shutdownInput();
 			s.shutdownOutput();
 			s.close();
@@ -252,7 +252,7 @@ public class Chat {
 		}
 
 	}
-	
+
 	/**
 	 * Send a message to a peer of your choice
 	 * @param id ID of client to send message to 
@@ -266,7 +266,7 @@ public class Chat {
 
 
 		//new Thread(new ClientHandler(communicationSocket)).start();
-		
+
 		if (message.length() <= 100) {
 			communicationStream.writeBytes("m" + " " + "Message from:" + " " + myIP() + "\r\n");
 			communicationStream.writeBytes("p" + " " + "Sender's port: " + client.getPort() + "\r\n");
@@ -275,9 +275,9 @@ public class Chat {
 			System.out.println("Your message must be under 100 characters, including spaces!");
 		}
 
-		
+
 	}
-	
+
 	/**
 	 * Helper class designed to extract the IP address and listening port number from the client socket
 	 */
@@ -297,56 +297,78 @@ public class Chat {
 			try {
 				input = new BufferedReader
 						(new InputStreamReader(connectionSocket.getInputStream()));
-				
+
 				while(true){
 					String line = input.readLine();
 					System.out.println(line);
-					
+
 					String[] clientInfo = null;
-					
+
 					try{
 						clientInfo = line.split(" ");
 					}catch(NullPointerException o){
 						return;
 					}
-					
+
 					ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
 					//System.out.println("Client ArrayList size: " + clientInfoList.size());
-					
+
 					if(line.startsWith("c")){
-						String clientAddress = clientInfo[1];
-						int clientListeningPort = Integer.parseInt(clientInfo[2]);
-						
-						Socket connectionSocket = new Socket(clientAddress, clientListeningPort);
-						
-						int tempID = id++;
-						Client client = new Client(tempID, clientAddress, clientListeningPort);
-						clientList.put(client.getId(), client);
-						clientSocketMap.put(client, connectionSocket);
-						
-						DataOutputStream response = new DataOutputStream(connectionSocket.getOutputStream());
-						response.writeBytes("r" + " " + "I got your connect message" + "\r\n");
-						
-						System.out.println("I'm connected to other peer now");
+
+						if(clientList.size() < 3){
+							String clientAddress = clientInfo[1];
+							int clientListeningPort = Integer.parseInt(clientInfo[2]);
+
+							Socket connectionSocket = new Socket(clientAddress, clientListeningPort);
+
+							int tempID = id++;
+							Client client = new Client(tempID, clientAddress, clientListeningPort);
+							clientList.put(client.getId(), client);
+							clientSocketMap.put(client, connectionSocket);
+
+							DataOutputStream response = new DataOutputStream(connectionSocket.getOutputStream());
+							response.writeBytes("r" + " " + "I got your connect message" + "\r\n");
+
+							System.out.println("I'm connected to other peer now");
+						}
+						else{
+							DataOutputStream response = new DataOutputStream(connectionSocket.getOutputStream());
+							response.writeBytes("d" + " " + "Cannot connect at this moment. Too many peers.Closing"
+									+ "connection" + "\r\n");
+							connectionSocket.close();
+						}
+
 					}
 					else if(line.startsWith("r")){
-						System.out.println("response: " + line);
+						StringBuffer buff= new StringBuffer();
+						
+						for(int i =1; i < clientInfo.length; i++){
+							buff.append(clientInfo[i] + " ");
+						}
+						
+						System.out.println("response: " + buff.toString());
 					}
 					else if(line.startsWith("m")){
-						System.out.println("Message received is " + line);
+						StringBuffer buff= new StringBuffer();
+						
+						for(int i =1; i < clientInfo.length; i++){
+							buff.append(clientInfo[i] + " ");
+						}
+						
+						System.out.println(buff.toString());
 					}
 					else if(line.startsWith("t")){
 						System.out.println(line);
 						String address = clientInfo[3];
 						int port = Integer.parseInt(clientInfo[6]);
-						
+
 						int removeID = 0;
 						Client clientToRemove = null;
-						
+
 						for(Map.Entry<Integer, Client> entry : clientList.entrySet()){
 							int id = entry.getKey();
 							Client client = entry.getValue();
-							
+
 							if(client.getAddress().equals(address) &&
 									client.getPort() == port){
 								removeID = id;
@@ -354,24 +376,51 @@ public class Chat {
 								break;
 							}
 						}
-						
-						
+
+
 						Socket closingSocket = clientSocketMap.get(clientToRemove);
-//						closingSocket.shutdownInput();
-//						closingSocket.shutdownOutput();
-//						closingSocket.close();
+						//						closingSocket.shutdownInput();
+						//						closingSocket.shutdownOutput();
+						//						closingSocket.close();
 						clientList.remove(removeID);
 						clientSocketMap.remove(clientToRemove);
 						System.out.println("Successfully terminated connection");
 					}
+					else if(line.startsWith("p")){
+						StringBuffer buff= new StringBuffer();
+						
+						for(int i =1; i < clientInfo.length; i++){
+							buff.append(clientInfo[i] + " ");
+						}
+						
+						System.out.println(buff.toString());
+					}
+					else if(line.startsWith("s")){
+						StringBuffer buff= new StringBuffer();
+						
+						for(int i =1; i < clientInfo.length; i++){
+							buff.append(clientInfo[i] + " ");
+						}
+						
+						System.out.println(buff.toString());
+					}
+					else if(line.startsWith("d")){
+						StringBuffer buff= new StringBuffer();
+						
+						for(int i =1; i < clientInfo.length; i++){
+							buff.append(clientInfo[i] + " ");
+						}
+						
+						System.out.println(buff.toString());
+					}
 
-					
+
 				}
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
+
 		}
 
 	}
@@ -387,7 +436,7 @@ public class Chat {
 		Chat chat = new Chat(port);
 		String command = "";
 		chat.setupListeningSocket();
-		
+
 		do{
 
 			System.out.print("Provide a command: ");
@@ -431,7 +480,7 @@ public class Chat {
 					message += values[i] + " ";
 				}
 				//String message = values[2];
-				
+
 				try {
 					chat.send(destID, message);
 				} catch (IOException e) {
@@ -449,9 +498,9 @@ public class Chat {
 			chat.exit();
 		}
 
-		
+
 	}
-	
-	
+
+
 
 }
