@@ -28,7 +28,7 @@ public class Chat {
 	private ServerSocket listenerSocket;
 	private Socket clientSocket;
 	private int listeningPort;
-	private Client client;
+	//private Client client;
 	//private HashMap<Integer, String> addressList;
 	public static HashMap<Integer, Client> clientList;
 	private HashMap<Client, DataOutputStream> clientStreamList;
@@ -54,7 +54,7 @@ public class Chat {
 		id = 0;
 		//addressList = new HashMap<>();
 		clientList = new HashMap<>();
-		client = null;
+		//client = null;
 		clientStreamList = new HashMap<>();
 		clientSocketMap = new HashMap<>();
 		System.out.println("Welcome!");
@@ -349,7 +349,7 @@ public class Chat {
 							
 							if(client.getAddress().equals(address) &&
 									client.getPort() == port){
-								//removeID = id;
+								removeID = id;
 								clientToRemove = client;
 								break;
 							}
@@ -360,7 +360,7 @@ public class Chat {
 //						closingSocket.shutdownInput();
 //						closingSocket.shutdownOutput();
 //						closingSocket.close();
-						clientList.remove(clientToRemove.getId());
+						clientList.remove(removeID);
 						clientSocketMap.remove(clientToRemove);
 						System.out.println("Successfully terminated connection");
 					}
