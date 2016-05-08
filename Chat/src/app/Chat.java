@@ -259,7 +259,14 @@ public class Chat {
 
 		//new Thread(new ClientHandler(communicationSocket)).start();
 		
-		communicationStream.writeBytes("m" + " " + "Message from:" + " " + myIP() + "\r\n");
+		if (message.length() <= 100) {
+			communicationStream.writeBytes("m" + " " + "Message from:" + " " + myIP() + "\r\n");
+			communicationStream.writeBytes("p" + "Sender's port: " + client.getPort() + "\r\n");
+			communicationStream.writeBytes("s" +  "Message: " + message);
+		} else {
+			System.out.println("Your message must be under 100 characters, including spaces!");
+		}
+		
 		
 		
 		
@@ -407,7 +414,11 @@ public class Chat {
 			else if(command.contains("send")){
 				String[] values = command.split(" ");
 				int destID = Integer.parseInt(values[1]);
-				String message = values[2];
+				String message = "";
+				for (int i = 2; i < values.length; i++) {
+					message += values[i];
+				}
+				//String message = values[2];
 				
 				try {
 					chat.send(destID, message);
