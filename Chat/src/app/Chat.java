@@ -130,8 +130,25 @@ public class Chat {
 		//1. Create ServerSocket and bind it to port
 		//2. Call the accept method on that ServerSocket
 		//3. Read the contents from the client socket
-
-
+	}
+	
+	public void terminate(int id) {
+		System.out.println("Terminating.....");
+		Client c;
+		Socket s;
+		try {
+			c = clientList.get(id); // get the Client at ip 
+			s = clientSocketMap.get(c);
+			s.shutdownInput();
+			s.shutdownOutput();
+			s.close();
+			clientSocketMap.remove(s);
+			clientList.remove(id);
+			System.out.println("Socket closed!");
+		} catch (Exception e1) {
+			System.out.println("Cannot find socket at that ID!");
+			//e1.printStackTrace();
+		}
 	}
 
 	public void list(){
@@ -297,5 +314,7 @@ public class Chat {
 
 
 	}
+	
+	
 
 }
