@@ -349,9 +349,9 @@ public class Chat {
 						
 						
 						Socket closingSocket = clientSocketMap.get(clientToRemove);
-						closingSocket.shutdownInput();
-						closingSocket.shutdownOutput();
-						closingSocket.close();
+//						closingSocket.shutdownInput();
+//						closingSocket.shutdownOutput();
+//						closingSocket.close();
 						clientList.remove(removeID);
 						clientSocketMap.remove(clientToRemove);
 						System.out.println("Successfully terminated connection");
