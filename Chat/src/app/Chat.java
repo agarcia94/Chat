@@ -213,7 +213,7 @@ public class Chat {
 			s = clientSocketMap.get(c);
 			
 			DataOutputStream terminateNotification = new DataOutputStream(s.getOutputStream());
-			terminateNotification.writeBytes("t" + " " + "Socket at " + c.getAddress() + " and port " + c.getPort() + 
+			terminateNotification.writeBytes("t" + " " + "Socket at " + this.myIP() + " and port " + this.getPortNumber() + 
 					" is terminating");
 			
 			//terminateNotification.writeBytes("ts" + " termination successful");
