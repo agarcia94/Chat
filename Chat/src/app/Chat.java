@@ -177,7 +177,7 @@ public class Chat {
 			DataOutputStream response;
 			try {
 				response = new DataOutputStream(clientSocket.getOutputStream());
-				response.writeBytes(myIP() + " " + listeningPort + "\r \n");
+				response.writeBytes("c " + myIP() + " " + listeningPort + "\r \n");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -254,7 +254,8 @@ public class Chat {
 		Socket communicationSocket = clientSocketMap.get(client);
 		DataOutputStream communicationStream = new DataOutputStream(communicationSocket.getOutputStream());
 
-		new Thread(new ClientHandler(communicationSocket)).start();
+		//new Thread(new ClientHandler(communicationSocket)).start();
+		
 		communicationStream.writeBytes("Message from " + myIP() + "\r \n");
 		
 		
@@ -289,45 +290,58 @@ public class Chat {
 			try {
 				input = new BufferedReader
 						(new InputStreamReader(connectionSocket.getInputStream()));
+				
+				while(true){
+					String line = input.readLine();
+					System.out.println(line);
+					String[] clientInfo = line.split(" ");
+					ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
+					//System.out.println("Client ArrayList size: " + clientInfoList.size());
+					
+					if(clientInfo[0].startsWith("c")){
+						String clientAddress = clientInfo[1];
+						int clientListeningPort = Integer.parseInt(clientInfo[2]);
+						
+						Socket connectionSocket = new Socket(clientAddress, clientListeningPort);
+						
+						int tempID = id++;
+						Client client = new Client(tempID, clientAddress, clientListeningPort);
+						clientList.put(client.getId(), client);
+						clientSocketMap.put(client, connectionSocket);
+						
+						DataOutputStream response = new DataOutputStream(connectionSocket.getOutputStream());
+						response.writeBytes("I got your connect message");
+						
+						System.out.println("I'm connected to other peer now");
+					}
+					
+//					if(clientInfo[0].contains("Message")){
+//						System.out.println("I got a message");
+//					}
+//					else{
+//						String ipAddress = clientInfo[0];
+//						System.out.println("Client IP: " + ipAddress);
+//
+//						int clientListenerPort = Integer.parseInt(clientInfo[1]);
+//						System.out.println("Client port number: " + clientListenerPort);
+//
+//					}
+					
+				}
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
 
-			try {
-				String line = input.readLine();
-				System.out.println(line);
-				String[] clientInfo = line.split(" ");
-				ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
-				System.out.println("Client ArrayList size: " + clientInfoList.size());
-				
-				if(clientInfo[0].contains("Message")){
-					System.out.println("I got a message");
-				}
-				else{
-					String ipAddress = clientInfo[0];
-					System.out.println("Client IP: " + ipAddress);
-
-					int clientListenerPort = Integer.parseInt(clientInfo[1]);
-					System.out.println("Client port number: " + clientListenerPort);
-					
-//					int tempID = id++;
-//					
-//					Client client  = new Client(tempID, ipAddress, clientListenerPort);
-//					clientList.put(tempID, client);
-//					clientSocketMap.put(client, connectionSocket);
-//					clientStreamList.put(client, new DataOutputStream(connectionSocket.getOutputStream()));
-				}
+			
 
 
 
 
 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			
 
 
 		}
