@@ -471,17 +471,17 @@ public class Chat {
 	public static void main(String[] args){
 		boolean start = false;
 		Scanner input = new Scanner(System.in);
+		String beginning = args[0];
 		String init = "";
-		int port = 0;
+		int port = Integer.parseInt(args[1]);
 		
 		// loop that locks a user out until the proper starting command is entered
 		do {
 			System.out.print("> ");
 			init = input.nextLine();
-			if (init.equals("./chat")) {
+			if (beginning.equals("./chat")) {
 				String[] values = init.split(" ");
 				try { 
-			        port = Integer.parseInt(args[1]); 
 			        start = true;
 			    } catch(NumberFormatException e) { 
 			        System.out.println("Please enter command \"./chat <port>\" to begin.");
