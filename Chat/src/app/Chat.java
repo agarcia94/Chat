@@ -478,10 +478,10 @@ public class Chat {
 		do {
 			System.out.print("> ");
 			init = input.nextLine();
-			if (init.startsWith("./chat")) {
+			if (args[0].equals("./chat")) {
 				String[] values = init.split(" ");
 				try { 
-			        port = Integer.parseInt(values[1]); 
+			        port = Integer.parseInt(args[1]); 
 			        start = true;
 			    } catch(NumberFormatException e) { 
 			        System.out.println("Please enter command \"./chat <port>\" to begin.");
