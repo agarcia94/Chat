@@ -329,17 +329,19 @@ public class Chat {
 							clientList.put(client.getId(), client);
 							clientSocketMap.put(client, connectionSocket);
 							
-							if(clientList.size() > 2){
+							if(clientList.size() > 3){
 								DataOutputStream response = new DataOutputStream(connectionSocket.getOutputStream());
 								response.writeBytes("d" + " " + "Cannot connect at this moment. Too many peers.Closing"
 										+ "connection" + "\r\n");
 								terminate(tempID);
 							}
+							else{
+								DataOutputStream response = new DataOutputStream(connectionSocket.getOutputStream());
+								response.writeBytes("r" + " " + "I got your connect message" + "\r\n");
 
-							DataOutputStream response = new DataOutputStream(connectionSocket.getOutputStream());
-							response.writeBytes("r" + " " + "I got your connect message" + "\r\n");
+								System.out.println("I'm connected to other peer now");
+							}
 
-							System.out.println("I'm connected to other peer now");
 						}
 						/*
 						else{
