@@ -478,7 +478,7 @@ public class Chat {
 		do {
 			System.out.print("> ");
 			init = input.nextLine();
-			if (args[0].equals("./chat")) {
+			if (init.equals("./chat")) {
 				String[] values = init.split(" ");
 				try { 
 			        port = Integer.parseInt(args[1]); 
@@ -486,6 +486,9 @@ public class Chat {
 			    } catch(NumberFormatException e) { 
 			        System.out.println("Please enter command \"./chat <port>\" to begin.");
 			    }
+				catch (IndexOutOfBoundsException e){
+					System.out.println("Port Number was not inputted, Enter \"./chat <port>\"");
+				}
 			} else {
 				System.out.println("Please enter command \"./chat <port>\" to begin.");
 			}
