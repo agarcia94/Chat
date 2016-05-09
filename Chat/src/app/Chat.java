@@ -299,16 +299,19 @@ public class Chat {
 						(new InputStreamReader(connectionSocket.getInputStream()));
 
 				while(true){
-					String line = input.readLine();
-					System.out.println(line);
-
-					String[] clientInfo = null;
-
+					
+					String line = "";
 					try{
-						clientInfo = line.split(" ");
-					}catch(NullPointerException o){
+						line = input.readLine();
+						System.out.println(line);
+					}catch(NullPointerException e){
 						return;
 					}
+
+
+					String[] clientInfo = null;
+					clientInfo = line.split(" ");
+
 
 					ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
 					//System.out.println("Client ArrayList size: " + clientInfoList.size());
