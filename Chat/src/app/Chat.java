@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.io.*;
 
-import client.Client;
+//import client.Client;
 //import client.ClientHandler;
 
 
@@ -124,7 +124,7 @@ public class Chat {
 					//						}
 
 					clientSocket = listenerSocket.accept(); //wait for client to connect
-					System.out.println("This host connected to client!");
+					System.out.println("\nThis host connected to a client!");
 					new Thread(new ClientHandler(clientSocket)).start();
 				} catch (Exception e) {
 					System.out.println("Cannot connect to client!");
@@ -187,16 +187,8 @@ public class Chat {
 			}
 		}
 		else{
-			System.out.println("Cannot connect to more than 3 peers");
+			System.out.println("Cannot connect to more than 3 peers!");
 		}
-
-
-
-
-
-		//1. Create ServerSocket and bind it to port
-		//2. Call the accept method on that ServerSocket
-		//3. Read the contents from the client socket
 	}
 
 
@@ -214,7 +206,7 @@ public class Chat {
 
 			DataOutputStream terminateNotification = new DataOutputStream(s.getOutputStream());
 			terminateNotification.writeBytes("t" + " " + "Socket at " + this.myIP() + " and port " + this.getPortNumber() + 
-					" is terminating");
+					" is terminating.");
 
 			//terminateNotification.writeBytes("ts" + " termination successful");
 
@@ -289,7 +281,6 @@ public class Chat {
 			connectionSocket = socket;
 		}
 
-
 		//code derived from http://edn.embarcadero.com/article/31995
 		public void run(){
 
@@ -315,8 +306,6 @@ public class Chat {
 					}catch(NullPointerException o){
 						return;
 					}
-					
-
 
 					ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
 					//System.out.println("Client ArrayList size: " + clientInfoList.size());
@@ -336,15 +325,15 @@ public class Chat {
 							
 							if(clientList.size() > 3){
 								DataOutputStream response = new DataOutputStream(connectionSocket.getOutputStream());
-								response.writeBytes("d" + " " + "Cannot connect at this moment. Too many peers.Closing"
+								response.writeBytes("d" + " " + "Cannot connect at this moment. Too many peers. Closing"
 										+ "connection" + "\r\n");
 								terminate(tempID);
 							}
 							else{
 								DataOutputStream response = new DataOutputStream(connectionSocket.getOutputStream());
-								response.writeBytes("r" + " " + "I got your connect message" + "\r\n");
+								response.writeBytes("r" + " " + "Connect message received!" + "\r\n");
 
-								System.out.println("I'm connected to other peer now");
+								System.out.println("Connection established to other peer!");
 							}
 
 						}
@@ -365,7 +354,7 @@ public class Chat {
 							buff.append(clientInfo[i] + " ");
 						}
 						
-						System.out.println("response: " + buff.toString());
+						System.out.println("Response: " + buff.toString());
 					}
 					else if(line.startsWith("m")){
 						StringBuffer buff= new StringBuffer();
@@ -398,30 +387,25 @@ public class Chat {
 
 
 						Socket closingSocket = clientSocketMap.get(clientToRemove);
-						//						closingSocket.shutdownInput();
-						//						closingSocket.shutdownOutput();
-						//						closingSocket.close();
 						clientList.remove(removeID);
 						clientSocketMap.remove(clientToRemove);
-						System.out.println("Successfully terminated connection");
-					}
-					else if(line.startsWith("p")){
+						System.out.println("Connection successfully terminated.");
+					} else if(line.startsWith("p")){
 						StringBuffer buff= new StringBuffer();
 						
 						for(int i =1; i < clientInfo.length; i++){
 							buff.append(clientInfo[i] + " ");
 						}
 						
-						System.out.println(buff.toString());
-					}
-					else if(line.startsWith("s")){
+						if (buff.toString() != null && !buff.toString().equals("null")) System.out.println(buff.toString());
+					} else if(line.startsWith("s")){
 						StringBuffer buff= new StringBuffer();
 						
 						for(int i =1; i < clientInfo.length; i++){
 							buff.append(clientInfo[i] + " ");
 						}
 						
-						System.out.println(buff.toString());
+						if (buff.toString() != null && !buff.toString().equals("null")) System.out.println(buff.toString());
 					}
 					else if(line.startsWith("d")){
 						StringBuffer buff= new StringBuffer();
@@ -429,36 +413,91 @@ public class Chat {
 						for(int i =1; i < clientInfo.length; i++){
 							buff.append(clientInfo[i] + " ");
 						}
-						
-						System.out.println(buff.toString());
+						if (buff.toString() != null && !buff.toString().equals("null")) System.out.println(buff.toString());
 					}
-
-
 				}
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-
+		}
+	}
+	
+	private class Client {
+		private int id;
+		private String address;
+		private int port;
+		
+		public Client(int ID){
+			this.id = ID;
+			address = "";
+			port = 0;
+		}
+		
+		public Client(int ID, String ipAddress, int destPort){
+			this.id= ID;
+			address = ipAddress;
+			port = destPort;
 		}
 
+		public int getId() {
+			return id;
+		}
+		
+		public void setId(int id) {
+			this.id = id;
+		}
+
+		public String getAddress() {
+			return address;
+		}
+		
+		public void setAddress(String address) {
+			this.address = address;
+		}
+
+		public int getPort() {
+			return port;
+		}
+		
+		public void setPort(int port){
+			this.port = port;
+		}
 	}
 
 
 
-	public static void main(String[] args){
 
+	public static void main(String[] args){
+		boolean start = false;
 		Scanner input = new Scanner(System.in);
-		System.out.print("Port: ");
-		int port = input.nextInt();
+		String init = "";
+		int port = 0;
+		
+		// loop that locks a user out until the proper starting command is entered
+		do {
+			System.out.print("> ");
+			init = input.nextLine();
+			if (init.startsWith("./chat")) {
+				String[] values = init.split(" ");
+				try { 
+			        port = Integer.parseInt(values[1]); 
+			        start = true;
+			    } catch(NumberFormatException e) { 
+			        System.out.println("Please enter command \"./chat <port>\" to begin.");
+			    }
+			} else {
+				System.out.println("Please enter command \"./chat <port>\" to begin.");
+			}
+			//port = input.nextInt();
+		} while(!start);
 
 		Chat chat = new Chat(port);
 		String command = "";
 		chat.setupListeningSocket();
-
+		
 		do{
-
-			System.out.print("Provide a command: ");
+			System.out.print("\nProvide a command: ");
 			Scanner secondInput = new Scanner(System.in);
 			command = secondInput.nextLine();
 
@@ -472,54 +511,64 @@ public class Chat {
 			}
 			else if(command.contains("connect")){
 				String[] values = command.split(" ");
-				String destIP = values[1];
-				int destPort = Integer.parseInt(values[2]);
-				chat.connect(destIP, destPort);
+				try {
+					String destIP = values[1];
+					int destPort = Integer.parseInt(values[2]);
+					chat.connect(destIP, destPort);
+				} catch (Exception e) {
+					System.out.println("Please enter your command in \"connect <IP> <port>\" format.\n"
+							+ "(Make sure that your IP and port numbers are valid!)");
+				}
 			}
 			else if(command.equals("list")){
 				chat.list();
 			}
 			else if(command.equals("myip")){
+				
 				System.out.println(chat.myIP());
-			}
-			else if(command.equals("myport")){
+				
+			} else if(command.equals("myport")){
+				
 				System.out.println(chat.getPortNumber());
+				
 			} else if (command.contains("terminate")) {
+				
 				String[] values = command.split(" ");
-				String id = values[1];
-				int termId = Integer.parseInt(id);
-				System.out.println("Terminating...");
-				chat.terminate(termId);
-			}
-			else if(command.contains("send")){
-				String[] values = command.split(" ");
-				int destID = Integer.parseInt(values[1]);
-				String message = "";
-				for (int i = 2; i < values.length; i++) {
-					message += values[i] + " ";
-				}
-				//String message = values[2];
-
 				try {
-					chat.send(destID, message);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					String id = values[1];
+					int termId = Integer.parseInt(id);
+					System.out.println("Terminating...");
+					chat.terminate(termId);
+				} catch (Exception e) {
+					System.out.println("Please enter your command in \"terminate <Client ID>\" format.\n" 
+							+ "(Make sure your client ID exists before attempting to send!)");
+				}
+				
+			} else if(command.contains("send")){
+				// attempt to send the message listed, otherwise inform user of correct format of command
+				try {
+					String[] values = command.split(" ");
+					int destID = Integer.parseInt(values[1]);
+					String message = "";
+					for (int i = 2; i < values.length; i++) {
+						message += values[i] + " ";
+					}
+					try {
+						chat.send(destID, message);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				//String message = values[2];
+				} catch (Exception e) {
+					System.out.println("Please enter your command in \"send <Client ID> <message>\" format.\n"
+							+ "(Make sure your client ID exists before attempting to send!)");
 				}
 			}
-
-
-
 		}while(!command.equals("exit"));
-
 
 		if (command.equals("exit")) {
 			chat.exit();
 		}
-
-
 	}
-
-
-
 }
