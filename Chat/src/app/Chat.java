@@ -310,7 +310,12 @@ public class Chat {
 
 
 					String[] clientInfo = null;
-					clientInfo = line.split(" ");
+					try{
+						clientInfo = line.split(" ");
+					}catch(NullPointerException o){
+						return;
+					}
+					
 
 
 					ArrayList<String> clientInfoList = new ArrayList<String>(Arrays.asList(clientInfo));
